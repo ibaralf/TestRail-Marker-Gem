@@ -16,7 +16,7 @@ Install it yourself as:
 
 To Use:
 
-  $ ruby testrail_marker.rb -p Test Project Name -r test_run_auto -x ../some/directory/results
+  $ testrail_marker.rb -p Test Project Name -r test_run_auto -x ../some/directory/results
 
 
 Arguments required:
