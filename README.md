@@ -16,20 +16,7 @@ Install it yourself as:
 
 To Use:
 
-1) Get all the files. 
-   $ git clone https://github.com/ibaralf/TestRail-API-Tool.git
-
-2) Make sure you have ruby installed
-   $ ruby -version
-
-3) Make sure you have nokigiti gem installed
-  $ gem install nokogiri
-
-4) Run the TestRail tool with help 
-  $ ruby trail_marker.rb -h
-
-5) Run with required arguments
-  $ ruby trail_marker.rb -p Test Project Name -r test_run_auto -x ../some/directory/results
+  $ ruby testrail_marker.rb -p Test Project Name -r test_run_auto -x ../some/directory/results
 
 
 Arguments required:
@@ -72,7 +59,7 @@ NOTE: You can associate multiple Test Cases to a single automated test if needed
     -r or -t *, name of test run (-r) or test plan (-t) (required parameter) 
     -m, milestone name (can be used when creating a test run)
     -s, test suite name (* required when creating a test run)
-    -u, user (e.g. ibarra.alfonso@gmail.com)
+    -u, user (e.g. ibarra@gmail.com)
     -pw, password or token (recommended)
     -url, URL of TestRail (e.g. https://test.mycompany.com/testrail)
     -d, debug mode (set to false to suppresses most messages)
