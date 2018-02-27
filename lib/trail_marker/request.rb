@@ -1,9 +1,11 @@
 require_relative 'testrail'
 
 # Calls testrail API
-#  TODO: Refactor post and get methods to one
+# History: 2/26/18 Removed retry for failed calls
+#          2/27/18 Combined post/get methods DRY
+#                  Change retry to skip only if TC not found.
+#
 class Request
-  
   RETRIES = 1
 
   def initialize(client, debug_mode = false)
@@ -11,61 +13,44 @@ class Request
     @debug_mode = get_debug_value(debug_mode)
     @debug_mode = true
   end
-  
-  # TODO: DRY with exec_get
-  def exec_post(req, data, exit_on_fail = false)
-    maxs = RETRIES
-    get_hash = nil
-    attempts = 0
-    is_good = false
-    while ! is_good && attempts < maxs
-      attempts += 1
-      get_hash = call_api(req, "POST", data)
-      is_good = get_hash[:status]
-      if ! is_good
-        if exit_on_fail
-          exit_script()
-        end
-        puts "Got Error making API call - #{req} "
-        if attempts < maxs
-          puts "Retrying #{attempts}"
-          sleep(4 * attempts)
-        end
-      end
-    end
-    return get_hash[:response]
-  end
-  
+
   # Retries an API call max number of times if an
-  # exception is raised. Sleeps 4, 8, 12 .... seconds 
+  # exception is raised. Sleeps 4, 8, 12 .... seconds
   # for each retry.
   #
-  def exec_get(req, exit_on_fail = false)
-    maxs = RETRIES
+  def exec_api_call(rest_type, req, data = nil, exit_on_fail = false)
+    max_retry = RETRIES
     get_hash = nil
     attempts = 0
     is_good = false
-    while ! is_good && attempts < maxs
+    while !is_good && attempts < max_retry
       attempts += 1
-      get_hash = call_api(req, "GET")
+      get_hash = call_api(req, rest_type, data)
       is_good = get_hash[:status]
-      if ! is_good
-        if exit_on_fail
-          exit_script()
-        end
+      unless is_good
+        exit_script() if exit_on_fail
         puts "Got Error making API call - #{req} "
-        if attempts < maxs
+        if attempts < max_retry
           puts "Retrying #{attempts}"
           sleep(4 * attempts)
         end
       end
     end
-    if ! is_good
-      check_authentication_fail(get_hash)
-    end
-    return get_hash[:response]
+    get_hash
   end
- 
+
+  # TODO: DRY with exec_get
+  def exec_post(req, data, exit_on_fail = false)
+    response_hash = exec_api_call('POST', req, data, exit_on_fail)
+    response_hash[:response]
+  end
+
+  def exec_get(req, exit_on_fail = false)
+    response_hash = exec_api_call('GET', req, nil, exit_on_fail)
+    check_authentication_fail(response_hash) unless response_hash[:status]
+    response_hash[:response]
+  end
+
   # Executes a TestRail API call but catches any
   # exception raised to prevent script from crashing.
   # Used by exec_get to do retries.
@@ -90,23 +75,23 @@ class Request
     msg("RESPONSE: #{res_hash}")
     return res_hash
   end
-  
+
   private
-   
+
   def exit_script()
     msg("Exiting script.")
     exit(1)
   end
-  
+
   def msg(msg_txt)
     if @debug_mode
       puts msg_txt
     end
   end
-  
+
   class APIError < StandardError
   end
-  
+
   def get_debug_value(debug_val)
     boolval = false
     if !! debug_val == debug_val
