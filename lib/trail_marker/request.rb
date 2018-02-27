@@ -1,9 +1,11 @@
 require_relative 'testrail'
 
-# Calls testrail 
+# Calls testrail API
+#  TODO: Refactor post and get methods to one
 class Request
   
-  
+  RETRIES = 1
+
   def initialize(client, debug_mode = false)
     @client = client
     @debug_mode = get_debug_value(debug_mode)
@@ -12,7 +14,7 @@ class Request
   
   # TODO: DRY with exec_get
   def exec_post(req, data, exit_on_fail = false)
-    maxs = 2
+    maxs = RETRIES
     get_hash = nil
     attempts = 0
     is_good = false
@@ -25,8 +27,8 @@ class Request
           exit_script()
         end
         puts "Got Error making API call - #{req} "
-        puts "Retrying #{attempts}"
         if attempts < maxs
+          puts "Retrying #{attempts}"
           sleep(4 * attempts)
         end
       end
@@ -39,7 +41,7 @@ class Request
   # for each retry.
   #
   def exec_get(req, exit_on_fail = false)
-    maxs = 2
+    maxs = RETRIES
     get_hash = nil
     attempts = 0
     is_good = false
@@ -52,8 +54,8 @@ class Request
           exit_script()
         end
         puts "Got Error making API call - #{req} "
-        puts "Retrying #{attempts}"
         if attempts < maxs
+          puts "Retrying #{attempts}"
           sleep(4 * attempts)
         end
       end
@@ -72,7 +74,7 @@ class Request
     msg("#{rtype} REQ: #{req}")
     res_hash = {:status => true, :response => ""}
     begin
-      if rtype == "POST"
+      if rtype == 'POST'
         get_response = @client.send_post(req, data)
       else
         get_response = @client.send_get(req)
