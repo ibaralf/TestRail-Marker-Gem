@@ -2,12 +2,11 @@ require 'nokogiri'
 require 'json'
 
 # HISTORY: 1/7/2016    modified to handle just 1 file
-#          3/21/2016   Allows indexing of test case, needed by ASCP tests
+#          3/21/2016   Allows indexing of test case
 #                      e.g. (TestRail: [C11, C22], [C33, C44], 1) Last argument is an index (starts at 0)
 #                      to mark test case C33 and C44. Modified method parse_trail_tag to implement this.
 #
-# TODO: Add SquishReport parser - done     
-#       Clean up due to change when 1 file is passed in the constructor
+# TODO: Parse Failure element CDATA to add to comment - will require changes in request.rb, etc.
 #
 class ResultsParser
   
