@@ -328,37 +328,4 @@ class ApiTestRail
     end
     return retval
   end
-  
-   
-  # NOTE: MARK_TEST_PLAN
-  # User Input: Project Name, TestRun Name
-  # Project Name > Get project_id
-  # Call API get_plans/project_id to get all test plans for the project
-  # Get testplan_id of testplan with the given name
-  # Call API get_plan/testplan_id to get testruns inside this testplan
-  # 
-  
-  
-  
-  
-  
-  ############### DELETE THESE NOT USED
-  
-  # TODO: Parse XML for failed reason and add to comment(?)
-  #
-  # def markoff_test(case_id, run_id, pass_status)
-    # status_id = search_array_kv(@statuses, 'name', 'failed', 'id')
-    # defect_txt = ""
-    # if pass_status
-      # status_id = search_array_kv(@statuses, 'name', 'passed', 'id')
-      # defect_txt = ""
-    # end
-    # equiv_json = {:status_id => status_id, :comment => 'Auto marker.', :defects => defect_txt}
-    # add_result_req = "add_result_for_case/" + run_id.to_s + "/" + case_id.to_s
-    # request_post(add_result_req, equiv_json)
-  # end
-#   
-  
- 
-  
 end
