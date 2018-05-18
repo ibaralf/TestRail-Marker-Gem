@@ -80,7 +80,7 @@ class Request
 
   def exit_script()
     msg("Exiting script.")
-    exit(1)
+    exit(0)
   end
 
   def msg(msg_txt)

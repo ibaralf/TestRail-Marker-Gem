@@ -163,6 +163,7 @@ class MarkTests
 
   def show_exit_msg
     puts "\n#{EXIT_MSG}\n"
+    exit 0
   end
 
 
