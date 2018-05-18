@@ -8,12 +8,34 @@ class MarkTests
   def initialize(argobj, config_filename)
     @argument = argobj
     cf = ConfigFile.new(config_filename)
-    cf.check_create_configfile
+    if !@argument.arg_exists?('-u') || !@argument.arg_exists?('-p')
+      cf.check_create_configfile
+    end
     @user = @argument.get_arg_value('-u') == '' ? cf.username : @argument.get_arg_value('-u')
     @token = @argument.get_arg_value('-pw') == '' ? cf.token : @argument.get_arg_value('-pw')
     @url = @argument.get_arg_value('-url') == '' ? cf.testrail_url : @argument.get_arg_value('-url')
     @default_comment = @argument.get_arg_value('-com') == '' ? cf.default_comment : @argument.get_arg_value('-com')
-    puts "VALUES: #{@user} #{@token}"
+
+    unless check_all_required_values
+      puts "Missing Required Parameters, exiting."
+      exit 0
+    end
+  end
+
+  def check_all_required_values
+    if is_empty_or_nil?(@user)
+      return false
+    end
+    if is_empty_or_nil?(@token)
+      return false
+    end
+    if is_empty_or_nil?(@url)
+      return false
+    end
+    if is_empty_or_nil?(@default_comment)
+      return false
+    end
+    true
   end
 
   # If user name and password (or token) are passed in the command line arguments
@@ -164,6 +186,10 @@ class MarkTests
   def show_exit_msg
     puts "\n#{EXIT_MSG}\n"
     exit 0
+  end
+
+  def is_empty_or_nil?(vale)
+    vale.to_s.empty?
   end
 
 

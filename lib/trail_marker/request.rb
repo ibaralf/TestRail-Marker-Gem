@@ -115,7 +115,7 @@ class Request
     max_attempts_str = "maximum number of failed"
     if response_hash[:response].include?(failed_str) || response_hash[:response].include?(max_attempts_str)
       puts "Cannot authenticate User or password.\n"
-      exit(1)
+      exit(0)
     end
   end
   

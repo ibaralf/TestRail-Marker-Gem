@@ -24,7 +24,7 @@ class ResultsParser
       puts "ERROR: Cannot find the XML results directory or file:"
       puts "       #{xml_loc}"
       puts "       Please check the path of the directory where the results are located.\n\n"
-      exit(1)
+      exit(0)
     end
   end
   
