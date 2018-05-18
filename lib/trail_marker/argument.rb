@@ -220,7 +220,7 @@ class Argument
     
     if !params_good || ! has_atleast_one || ! has_only_one
       puts "#{REQUIRED}"
-      exit(1)
+      exit(0)
     end
      
   end

@@ -26,7 +26,7 @@ class ConfigFile
     end
     if atmps >= 3
       puts "\nERROR: Value cannot be empty... exiting."
-      exit(1)
+      exit(0)
     end
     return retval
   end
