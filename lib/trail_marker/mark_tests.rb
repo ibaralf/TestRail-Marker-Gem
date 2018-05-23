@@ -185,6 +185,7 @@ class MarkTests
 
   def show_exit_msg
     puts "\n#{EXIT_MSG}\n"
+    puts "TestRail Marker exit code: 0"
     exit 0
   end
 
